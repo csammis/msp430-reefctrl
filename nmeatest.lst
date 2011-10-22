@@ -1,0 +1,149 @@
+
+nmeatest.elf:     file format elf32-msp430
+
+
+Disassembly of section .text:
+
+0000f800 <__init_stack>:
+    f800:	31 40 80 02 	mov	#640,	r1	;#0x0280
+
+0000f804 <__low_level_init>:
+    f804:	b2 40 80 5a 	mov	#23168,	&0x0120	;#0x5a80
+    f808:	20 01 
+
+0000f80a <__do_copy_data>:
+    f80a:	3f 40 00 00 	mov	#0,	r15	;#0x0000
+    f80e:	0f 93       	tst	r15		
+    f810:	05 24       	jz	$+12     	;abs 0xf81c
+    f812:	2f 83       	decd	r15		
+    f814:	9f 4f 22 f9 	mov	-1758(r15),512(r15);0xf922(r15), 0x0200(r15)
+    f818:	00 02 
+    f81a:	fb 23       	jnz	$-8      	;abs 0xf812
+
+0000f81c <__do_clear_bss>:
+    f81c:	3f 40 00 00 	mov	#0,	r15	;#0x0000
+    f820:	0f 93       	tst	r15		
+    f822:	04 24       	jz	$+10     	;abs 0xf82c
+    f824:	1f 83       	dec	r15		
+    f826:	cf 43 00 02 	mov.b	#0,	512(r15);r3 As==00, 0x0200(r15)
+    f82a:	fc 23       	jnz	$-6      	;abs 0xf824
+
+0000f82c <__jump_to_main>:
+    f82c:	30 40 e2 f8 	br	#0xf8e2	
+
+0000f830 <__ctors_end>:
+    f830:	30 40 1e f9 	br	#0xf91e	
+
+0000f834 <GetUtcHourFromGGA>:
+    f834:	0e 93       	tst	r14		
+    f836:	26 24       	jz	$+78     	;abs 0xf884
+    f838:	0f 93       	tst	r15		
+    f83a:	24 24       	jz	$+74     	;abs 0xf884
+    f83c:	0d 43       	clr	r13		
+    f83e:	6c 4f       	mov.b	@r15,	r12	
+    f840:	5c 9d 18 f9 	cmp.b	-1768(r13),r12	;0xf918(r13)
+    f844:	22 20       	jnz	$+70     	;abs 0xf88a
+    f846:	4c 93       	tst.b	r12		
+    f848:	20 24       	jz	$+66     	;abs 0xf88a
+    f84a:	1d 53       	inc	r13		
+    f84c:	1f 53       	inc	r15		
+    f84e:	3d 90 06 00 	cmp	#6,	r13	;#0x0006
+    f852:	f5 23       	jnz	$-20     	;abs 0xf83e
+    f854:	ff 90 2c 00 	cmp.b	#44,	0(r15)	;#0x002c, 0x0000(r15)
+    f858:	00 00 
+    f85a:	1a 20       	jnz	$+54     	;abs 0xf890
+    f85c:	1f 53       	inc	r15		
+    f85e:	6d 4f       	mov.b	@r15,	r13	
+    f860:	4d 93       	tst.b	r13		
+    f862:	16 24       	jz	$+46     	;abs 0xf890
+    f864:	5c 4f 01 00 	mov.b	1(r15),	r12	;0x0001(r15)
+    f868:	4c 93       	tst.b	r12		
+    f86a:	12 24       	jz	$+38     	;abs 0xf890
+    f86c:	4f 4d       	mov.b	r13,	r15	
+    f86e:	4f 5f       	rla.b	r15		
+    f870:	4f 5f       	rla.b	r15		
+    f872:	4f 5d       	add.b	r13,	r15	
+    f874:	4f 5f       	rla.b	r15		
+    f876:	4f 5c       	add.b	r12,	r15	
+    f878:	7f 50 f0 ff 	add.b	#-16,	r15	;#0xfff0
+    f87c:	ce 4f 00 00 	mov.b	r15,	0(r14)	;0x0000(r14)
+    f880:	0f 43       	clr	r15		
+    f882:	30 41       	ret			
+    f884:	3f 40 fd ff 	mov	#-3,	r15	;#0xfffd
+    f888:	30 41       	ret			
+    f88a:	3f 40 fe ff 	mov	#-2,	r15	;#0xfffe
+    f88e:	30 41       	ret			
+    f890:	3f 43       	mov	#-1,	r15	;r3 As==11
+    f892:	30 41       	ret			
+    f894:	24 47       	mov	@r7,	r4	
+    f896:	50 47 47 41 	br	16711(r7)	;0x4147(r7)
+    f89a:	2c 32       	jn	$-934    	;abs 0xf4f4
+    f89c:	33 33       	jn	$-408    	;abs 0xf704
+    f89e:	37 34       	jge	$+112    	;abs 0xf90e
+    f8a0:	30 2e       	jc	$-926    	;abs 0xf502
+    f8a2:	30 30       	jn	$+98     	;abs 0xf904
+    f8a4:	30 2c       	jc	$+98     	;abs 0xf906
+    f8a6:	32 35       	jge	$+614    	;abs 0xfb0c
+    f8a8:	30 33       	jn	$-414    	;abs 0xf70a
+    f8aa:	2e 36       	jge	$-930    	;abs 0xf508
+    f8ac:	33 31       	jn	$+616    	;abs 0xfb14
+    f8ae:	39 2c       	jc	$+116    	;abs 0xf922
+    f8b0:	4e 2c       	jc	$+158    	;abs 0xf94e
+    f8b2:	31 32       	jn	$-924    	;abs 0xf516
+    f8b4:	31 33       	jn	$-412    	;abs 0xf718
+    f8b6:	36 2e       	jc	$-914    	;abs 0xf524
+    f8b8:	30 30       	jn	$+98     	;abs 0xf91a
+    f8ba:	39 39       	jl	$+628    	;abs 0xfb2e
+    f8bc:	2c 45       	mov	@r5,	r12	
+    f8be:	2c 31       	jn	$+602    	;abs 0xfb18
+    f8c0:	2c 30       	jn	$+90     	;abs 0xf91a
+    f8c2:	38 2c       	jc	$+114    	;abs 0xf934
+    f8c4:	31 2e       	jc	$-924    	;abs 0xf528
+    f8c6:	31 2c       	jc	$+100    	;abs 0xf92a
+    f8c8:	36 33       	jn	$-402    	;abs 0xf736
+    f8ca:	2e 38       	jl	$+94     	;abs 0xf928
+    f8cc:	2c 4d       	mov	@r13,	r12	
+    f8ce:	2c 31       	jn	$+602    	;abs 0xfb28
+    f8d0:	35 2e       	jc	$-916    	;abs 0xf53c
+    f8d2:	32 2c       	jc	$+102    	;abs 0xf938
+    f8d4:	4d 2c       	jc	$+156    	;abs 0xf970
+    f8d6:	2c 30       	jn	$+90     	;abs 0xf930
+    f8d8:	30 30       	jn	$+98     	;abs 0xf93a
+    f8da:	30 2a       	jnc	$-926    	;abs 0xf53c
+    f8dc:	36 34       	jge	$+110    	;abs 0xf94a
+    f8de:	0d 0a       	.word	0x0a0d;	????	
+	...
+
+0000f8e2 <main>:
+    f8e2:	31 40 7e 02 	mov	#638,	r1	;#0x027e
+    f8e6:	d2 d3 22 00 	bis.b	#1,	&0x0022	;r3 As==01
+    f8ea:	d2 c3 21 00 	bic.b	#1,	&0x0021	;r3 As==01
+    f8ee:	c1 43 00 00 	mov.b	#0,	0(r1)	;r3 As==00, 0x0000(r1)
+    f8f2:	0e 41       	mov	r1,	r14	
+    f8f4:	3f 40 94 f8 	mov	#-1900,	r15	;#0xf894
+    f8f8:	b0 12 34 f8 	call	#0xf834	
+    f8fc:	0f 93       	tst	r15		
+    f8fe:	06 20       	jnz	$+14     	;abs 0xf90c
+    f900:	f1 90 17 00 	cmp.b	#23,	0(r1)	;#0x0017, 0x0000(r1)
+    f904:	00 00 
+    f906:	02 20       	jnz	$+6      	;abs 0xf90c
+    f908:	d2 d3 21 00 	bis.b	#1,	&0x0021	;r3 As==01
+    f90c:	32 d0 18 00 	bis	#24,	r2	;#0x0018
+    f910:	0f 43       	clr	r15		
+    f912:	21 53       	incd	r1		
+    f914:	30 40 20 f9 	br	#0xf920	
+
+0000f918 <CSWTCH.10>:
+    f918:	24 47 50 47 47 41                                   $GPGGA
+
+0000f91e <_unexpected_>:
+    f91e:	00 13       	reti			
+
+0000f920 <__stop_progExec__>:
+    f920:	ff 3f       	jmp	$+0      	;abs 0xf920
+
+Disassembly of section .vectors:
+
+0000ffe0 <InterruptVectors>:
+    ffe0:	30 f8 30 f8 30 f8 30 f8 30 f8 30 f8 30 f8 30 f8     0.0.0.0.0.0.0.0.
+    fff0:	30 f8 30 f8 30 f8 30 f8 30 f8 30 f8 30 f8 00 f8     0.0.0.0.0.0.0...
