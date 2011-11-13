@@ -47,13 +47,39 @@ int main()
     init_lcd();
     init_mode();
 
+    // Set up interrupts
+    P1IE   = BUTTON1;
+    P1OUT |= BUTTON1;
+    P1REN  = BUTTON1;
+
     return 0;
+}
+
+// debounce
+//  debounces a button using a cycle delay
+void debounce(unsigned char ucPin)
+{
+    // Disable the interrupt and clear the pending flag
+    P1IE  &= ~ucPin;
+    P1IFG &= ~ucPin;
+
+    __asm__
+    (
+        "mov #1000, r2  \n\t"
+        "dec r2         \n\t"
+        "jnz $-2        \n\t"
+    );
+
+    // Clear the pending interrupt flags and re-enable the interrupt
+    P1IFG &= ~ucPin;
+    P1IE  |=  ucPin;
 }
 
 void __attribute__((interrupt(PORT1_VECTOR))) port1_isr()
 {
     if (P1IFG & BUTTON1)
     {
+        debounce(BUTTON1);
         switch_mode();
     }
 }
