@@ -1,3 +1,7 @@
+*.swp
+*.hex
+*.map
+*.d
 *.lst
 *.o
 *.elf
