@@ -10,6 +10,7 @@
 #include <msp430.h>
 #include "mode.h"
 #include "lcd.h"
+#include "action.h"
 
 #define BUTTON1 BIT3
 #define BUTTON2 BIT4
@@ -23,8 +24,6 @@
 #define STATE_POWRHEADS 0x0040
 
 
-// State and methods to switch between reefctrl functions
-
 void update_display_for_state()
 {
     //TODO implement this
@@ -37,20 +36,17 @@ void update_display_for_state()
     // MODE_TIME display time and "Set?"
 }
 
-void update_action()
-{
-    //TODO implement this
-}
-
 int main()
 {
     init_lcd();
     init_mode();
 
     // Set up interrupts
-    P1IE   = BUTTON1;
-    P1OUT |= BUTTON1;
-    P1REN  = BUTTON1;
+    P1IE   = BUTTON1 | BUTTON2;
+    P1OUT |= BUTTON1 | BUTTON2;
+    P1REN  = BUTTON1 | BUTTON2;
+
+    __bis_SR_register(CPUOFF | GIE); // Switch to LPM0 and enable interrupts
 
     return 0;
 }
@@ -81,6 +77,12 @@ void __attribute__((interrupt(PORT1_VECTOR))) port1_isr()
     {
         debounce(BUTTON1);
         switch_mode();
+    }
+    
+    if (P1IFG & BUTTON2)
+    {
+        debounce(BUTTON2);
+        update_action();
     }
 }
 
