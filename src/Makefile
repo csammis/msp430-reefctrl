@@ -12,7 +12,7 @@ TARGET     = main
 MCU        = msp430g2231
 # List all the source files here
 # eg if you have a source file foo.c then list it here
-SOURCES = main.c mode.c lcd.c action.c
+SOURCES = main.c mode.c lcd.c action.c time.c
 # Include are located in the Include directory
 INCLUDES = -IInclude
 # Add or subtract whatever MSPGCC flags you want. There are plenty more
@@ -28,10 +28,12 @@ AS       = msp430-gcc
 GASP     = msp430-gasp
 NM       = msp430-nm
 OBJCOPY  = msp430-objcopy
+OBJDUMP  = msp430-objdump
 RANLIB   = msp430-ranlib
 STRIP    = msp430-strip
 SIZE     = msp430-size
 READELF  = msp430-readelf
+MSPDEBUG = mspdebug
 CP       = cp -p
 RM       = rm -f
 MV       = mv
@@ -41,7 +43,7 @@ DEPEND = $(SOURCES:.c=.d)
 # all the object files
 OBJECTS = $(SOURCES:.c=.o)
 
-all: $(TARGET).elf $(TARGET).hex
+all: $(TARGET).elf $(TARGET).hex $(TARGET).lst
 
 $(TARGET).elf: $(OBJECTS)
 	echo "Linking $@"
@@ -59,8 +61,8 @@ $(TARGET).elf: $(OBJECTS)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 # rule for making assembler source listing, to see the code
-%.lst: %.c
-	$(CC) -c $(CFLAGS) -Wa,-anlhd $< > $@
+%.lst: %.elf
+	$(OBJDUMP) -d $< >$@
 
 # include the dependencies unless we're going to clean, then forget about them.
 ifneq ($(MAKECMDGOALS), clean)
@@ -73,6 +75,9 @@ endif
 %.d: %.c
 	echo "Generating dependencies $@ from $<"
 	$(CC) -M ${CFLAGS} $< >$@
+
+install: $(TARGET).elf
+	$(MSPDEBUG) rf2500 "prog $(TARGET).elf"
 
 .SILENT:
 .PHONY:	clean
