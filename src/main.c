@@ -12,6 +12,7 @@
 #include "lcd.h"
 #include "action.h"
 #include "time.h"
+#include "graphics.h"
 
 #define Interrupt(x) void __attribute__((interrupt(x)))
 
@@ -37,7 +38,7 @@ int main()
     init_time();
 
     lcd_clear();
-    lcd_write_string(0, 0, "C");
+    lcd_write_graphic(0, 0, graphic_drip, GRAPHIC_DRIP_SIZE);
 
     P1OUT ^= BIT3;
 

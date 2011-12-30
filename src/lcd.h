@@ -23,11 +23,15 @@ void lcd_clear();
 
 // lcd_clear_row
 //  Clear the specified character row 
-void lcd_clear_row(short y);
+void lcd_clear_row(unsigned char y);
 
 // lcd_write_string
 //  Write the contents of a string to the specified x,y offsets on the screen
-void lcd_write_string(short x, short y, const char* pStr);
+void lcd_write_string(unsigned char x, unsigned char y, const char* pStr);
+
+// lcd_write_graphic
+//  Writes the contents of a char array representing a graphic to the specified x,y offsets on the screen
+void lcd_write_graphic(unsigned char x, unsigned char y, const unsigned char graphic[], unsigned short size);
 
 #endif // __LCD_H__
 

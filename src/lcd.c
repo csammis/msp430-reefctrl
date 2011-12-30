@@ -111,6 +111,8 @@ void init_lcd()
 {
     P1DIR |= LCD_DC_PIN + LCD_SCE_PIN + LCD_SCLK_PIN + LCD_RST_PIN + LCD_LED_PIN + LCD_DATA_PIN;
 
+    P1_LO(LCD_LED_PIN);
+
     P1_LO(LCD_SCE_PIN);
 
     // Send a reset to the LCD ('R)
@@ -139,19 +141,26 @@ void lcd_clear()
     lcd_set_address(0, 0);
 }
 
-void lcd_clear_row(short y)
+void lcd_clear_row(unsigned char y)
 {
 }
 
-void lcd_write_string(short x, short y, const char* pStr)
+char drip_1[6] = {0x78, 0xFE, 0xFF, 0xFE, 0x78, 0x00};
+
+void lcd_write_string(unsigned char x, unsigned char y, const char* pStr)
 {
     lcd_set_address(x, y);
-    
-    lcd_write_data(LCD_WRITE_DATA, 0x3e);
-    lcd_write_data(LCD_WRITE_DATA, 0x41);
-    lcd_write_data(LCD_WRITE_DATA, 0x41);
-    lcd_write_data(LCD_WRITE_DATA, 0x41);
-    lcd_write_data(LCD_WRITE_DATA, 0x22);
+}
+
+void lcd_write_graphic(unsigned char x, unsigned char y, const unsigned char graphic[], unsigned short size)
+{
+    lcd_set_address(x, y);
+
+    unsigned short i;
+    for (i = 0; i < size; i++)
+    {
+        lcd_write_data(LCD_WRITE_DATA, graphic[i]);
+    }
 }
 
 //eof
