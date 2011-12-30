@@ -30,6 +30,14 @@ int main()
     // Initialization: clocks first, then peripherals, then start the timers last.
     init_clocks();
     init_lcd();
+
+    // Draw a divider line on the screen
+    unsigned char c;
+    unsigned char d[] = { 0xFF };
+    for (c = 0; c < 6; c++)
+    {
+        lcd_write_graphic(70, c, d, 1);
+    }
     
     // TimerA functions as a RTC sourced from ACLK
     BCSCTL1 &= XTS;
