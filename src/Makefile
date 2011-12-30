@@ -12,7 +12,7 @@ TARGET     = main
 MCU        = msp430g2231
 # List all the source files here
 # eg if you have a source file foo.c then list it here
-SOURCES = main.c mode.c lcd.c action.c time.c
+SOURCES = main.c lcd.c
 # Include are located in the Include directory
 INCLUDES = -IInclude
 # Add or subtract whatever MSPGCC flags you want. There are plenty more
