@@ -87,10 +87,6 @@ void time_tick()
     {
         currtime[SECONDS]++;
     }
-
-    // debug: toggle P1.0
-    P1OUT ^= BIT0;
-
 }
 
 //eof
