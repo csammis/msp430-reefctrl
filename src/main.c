@@ -8,10 +8,7 @@
  */
 
 #include <msp430.h>
-#include "mode.h"
 #include "lcd.h"
-#include "action.h"
-#include "time.h"
 #include "graphics.h"
 
 #define Interrupt(x) void __attribute__((interrupt(x)))
@@ -34,11 +31,13 @@ int main()
     init_clocks();
     init_lcd();
     
-    init_mode();
-    init_time();
+    // TimerA functions as a RTC sourced from ACLK
+    BCSCTL1 &= XTS;
+    BCSCTL3 |= LFXT1S_0 | XCAP_3;
 
-    lcd_clear();
-    lcd_write_graphic(0, 0, graphic_drip, GRAPHIC_DRIP_SIZE);
+    TACCR0 = 0x3FFF;
+    TACTL = TASSEL_1 | MC_1;
+    TACCTL0 = CCIE;
 
     P1OUT ^= BIT3;
 
@@ -47,13 +46,35 @@ int main()
     return 0;
 }
 
+unsigned char drip_x = 79;
+unsigned char drip_y = 0;
+
 // timerA_isr
 //  Increment the clock one step when TimerA elapses
 Interrupt(TIMERA0_VECTOR) timerA_isr()
 {
     TACCTL0 &= ~CCIFG;
-    time_tick();
-}
 
+    switch (drip_y)
+    {
+    case 0:
+        lcd_write_graphic(drip_x, drip_y, graphic_drip, GRAPHIC_DRIP_SIZE);
+        break;
+    case 1: case 2: case 3: case 4: case 5:
+        lcd_clear_char_columns(drip_x, drip_y - 1, GRAPHIC_DRIP_SIZE);
+        lcd_write_graphic(drip_x, drip_y, graphic_drip, GRAPHIC_DRIP_SIZE);
+        break;
+    case 6:
+        lcd_clear_char_columns(drip_x, 5, GRAPHIC_DRIP_SIZE);
+        lcd_write_graphic(drip_x, 5, graphic_splash, GRAPHIC_SPLASH_SIZE);
+        break;
+    case 7:
+        lcd_clear_char_columns(drip_x, 5, GRAPHIC_SPLASH_SIZE);
+        drip_y = -1;
+        break;
+    }
+
+    drip_y++;
+}
 //eof
 

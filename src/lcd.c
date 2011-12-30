@@ -128,6 +128,8 @@ void init_lcd()
     lcd_write_data(LCD_WRITE_COMMAND, PCD8544_SETBIAS | 0x03);
     lcd_write_data(LCD_WRITE_COMMAND, PCD8544_FUNCTIONSET);
     lcd_write_data(LCD_WRITE_COMMAND, PCD8544_DISPLAYCONTROL | PCD8544_DISPLAYNORMAL);
+
+    lcd_clear();
 }
 
 void lcd_clear()
@@ -160,6 +162,16 @@ void lcd_write_graphic(unsigned char x, unsigned char y, const unsigned char gra
     for (i = 0; i < size; i++)
     {
         lcd_write_data(LCD_WRITE_DATA, graphic[i]);
+    }
+}
+
+void lcd_clear_char_columns(unsigned char x, unsigned char y, unsigned short number)
+{
+    lcd_set_address(x, y);
+    unsigned short i;
+    for (i = 0; i < number; i++)
+    {
+        lcd_write_data(LCD_WRITE_DATA, 0x00);
     }
 }
 
