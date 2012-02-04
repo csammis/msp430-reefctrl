@@ -31,19 +31,14 @@ int main()
     init_clocks();
     init_lcd();
 
-    // Draw a divider line on the screen
-    unsigned char c;
-    unsigned char d[] = { 0xFF };
-    for (c = 0; c < 6; c++)
-    {
-        lcd_write_graphic(70, c, d, 1);
-    }
-    
+    graphics_draw_line(70);
+    graphics_start_drip_animation(79);
+
     // TimerA functions as a RTC sourced from ACLK
     BCSCTL1 &= XTS;
     BCSCTL3 |= LFXT1S_0 | XCAP_3;
 
-    TACCR0 = 0x3FFF;
+    TACCR0 = 0x3FFF; // every half-second
     TACTL = TASSEL_1 | MC_1;
     TACCTL0 = CCIE;
 
@@ -54,35 +49,13 @@ int main()
     return 0;
 }
 
-unsigned char drip_x = 79;
-unsigned char drip_y = 0;
-
 // timerA_isr
 //  Increment the clock one step when TimerA elapses
 Interrupt(TIMERA0_VECTOR) timerA_isr()
 {
     TACCTL0 &= ~CCIFG;
 
-    switch (drip_y)
-    {
-    case 0:
-        lcd_write_graphic(drip_x, drip_y, graphic_drip, GRAPHIC_DRIP_SIZE);
-        break;
-    case 1: case 2: case 3: case 4: case 5:
-        lcd_clear_char_columns(drip_x, drip_y - 1, GRAPHIC_DRIP_SIZE);
-        lcd_write_graphic(drip_x, drip_y, graphic_drip, GRAPHIC_DRIP_SIZE);
-        break;
-    case 6:
-        lcd_clear_char_columns(drip_x, 5, GRAPHIC_DRIP_SIZE);
-        lcd_write_graphic(drip_x, 5, graphic_splash, GRAPHIC_SPLASH_SIZE);
-        break;
-    case 7:
-        lcd_clear_char_columns(drip_x, 5, GRAPHIC_SPLASH_SIZE);
-        drip_y = -1;
-        break;
-    }
-
-    drip_y++;
+    graphics_step_drip_animation();
 }
 //eof
 

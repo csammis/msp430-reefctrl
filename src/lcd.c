@@ -11,24 +11,16 @@
  */
 
 #include "lcd.h"
-#include <msp430.h>
 
-// The LCD should be connected to the MSP430 controller pins P1.x
-#define LCD_SCE_PIN  BIT0
-#define LCD_DC_PIN   BIT1
-#define LCD_LED_PIN  BIT3
-#define LCD_RST_PIN  BIT4
-#define LCD_SCLK_PIN BIT5
-#define LCD_DATA_PIN BIT6
+#include <msp430.h>
+#include "peripherals.h"
+#include "graphics.h"
 
 #define LCD_WRITE_DATA 1
 #define LCD_WRITE_COMMAND 0
 
 // Convenience macros for P1 pin toggling
-#define P1_LO(x) P1OUT &= ~x
-#define P1_HI(x) P1OUT |=  x
 #define LCD_PULSE_CLOCK P1_LO(LCD_SCLK_PIN); P1_HI(LCD_SCLK_PIN);
-
 
 // PCD8544 constants courtesy of RobG at 43oh.com forums
 #define PCD8544_POWERDOWN 0x04
@@ -54,18 +46,9 @@
 #define PCD8544_SETBIAS 0x10
 #define PCD8544_SETVOP 0x80
 
-//transform
-#define NONE 0x00
-#define FLIP_H 0x01
-#define FLIP_V 0x02
-#define ROTATE 0x04 // 90 deg CW
-#define ROTATE_90_CW ROTATE
-#define ROTATE_90_CCW (FLIP_H | FLIP_V | ROTATE)
-#define ROTATE_180 (FLIP_H | FLIP_V)
-
-// lcd_write_data
+// lcd_write_byte
 //  Selects the LCD bus, writes data, waits for it to be written, and deselects the bus
-void lcd_write_data(unsigned char mode, unsigned char data)
+void lcd_write_byte(unsigned char mode, unsigned char data)
 {
     if (mode == LCD_WRITE_DATA)
     {
@@ -103,8 +86,8 @@ void lcd_write_data(unsigned char mode, unsigned char data)
 //  Moves the current writing location to the specified coordinates
 void lcd_set_address(unsigned char x, unsigned char y)
 {
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_SETXADDR | x);
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_SETYADDR | y);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_SETXADDR | x);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_SETYADDR | y);
 }
 
 void init_lcd()
@@ -122,12 +105,12 @@ void init_lcd()
 
     P1_HI(LCD_SCE_PIN);
 
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION);
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_SETVOP | 0xBF);
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_SETTEMP | 0x02);
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_SETBIAS | 0x03);
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_FUNCTIONSET);
-    lcd_write_data(LCD_WRITE_COMMAND, PCD8544_DISPLAYCONTROL | PCD8544_DISPLAYNORMAL);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_FUNCTIONSET | PCD8544_EXTENDEDINSTRUCTION);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_SETVOP | 0xBF);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_SETTEMP | 0x02);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_SETBIAS | 0x03);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_FUNCTIONSET);
+    lcd_write_byte(LCD_WRITE_COMMAND, PCD8544_DISPLAYCONTROL | PCD8544_DISPLAYNORMAL);
 
     lcd_clear();
 }
@@ -137,7 +120,7 @@ void lcd_clear()
     lcd_set_address(0, 0);
     int c = 0;
     while(c < PCD8544_MAXBYTES) {
-        lcd_write_data(LCD_WRITE_DATA, 0);
+        lcd_write_byte(LCD_WRITE_DATA, 0);
         c++;
     }
     lcd_set_address(0, 0);
@@ -147,13 +130,6 @@ void lcd_clear_row(unsigned char y)
 {
 }
 
-char drip_1[6] = {0x78, 0xFE, 0xFF, 0xFE, 0x78, 0x00};
-
-void lcd_write_string(unsigned char x, unsigned char y, const char* pStr)
-{
-    lcd_set_address(x, y);
-}
-
 void lcd_write_graphic(unsigned char x, unsigned char y, const unsigned char graphic[], unsigned short size)
 {
     lcd_set_address(x, y);
@@ -161,7 +137,7 @@ void lcd_write_graphic(unsigned char x, unsigned char y, const unsigned char gra
     unsigned short i;
     for (i = 0; i < size; i++)
     {
-        lcd_write_data(LCD_WRITE_DATA, graphic[i]);
+        lcd_write_byte(LCD_WRITE_DATA, graphic[i]);
     }
 }
 
@@ -171,7 +147,7 @@ void lcd_clear_char_columns(unsigned char x, unsigned char y, unsigned short num
     unsigned short i;
     for (i = 0; i < number; i++)
     {
-        lcd_write_data(LCD_WRITE_DATA, 0x00);
+        lcd_write_byte(LCD_WRITE_DATA, 0x00);
     }
 }
 

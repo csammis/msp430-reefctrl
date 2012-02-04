@@ -14,7 +14,7 @@
 #define __LCD_H__
 
 // init_lcd
-//  Initializes the connected LCD, clears it, and sets the cursor offset to 0,i0
+//  Initializes the connected LCD, clears it, and sets the cursor offset to 0,0
 void init_lcd();
 
 // lcd_clear
@@ -24,10 +24,6 @@ void lcd_clear();
 // lcd_clear_row
 //  Clear the specified character row 
 void lcd_clear_row(unsigned char y);
-
-// lcd_write_string
-//  Write the contents of a string to the specified x,y offsets on the screen
-void lcd_write_string(unsigned char x, unsigned char y, const char* pStr);
 
 // lcd_write_graphic
 //  Writes the contents of a char array representing a graphic to the specified x,y offsets on the screen

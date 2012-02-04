@@ -6,14 +6,29 @@
  * Source released under the MIT License (http://www.opensource.org/licenses/mit-license.php)
  *
  * graphics.h
- *  Definitions for various reef-related graphics to display on an LCD
+ *  Methods for drawing various reef-related graphics to the attached LCD
  */
 
- #define GRAPHIC_DRIP_SIZE 5
- const unsigned char graphic_drip[] = { 0x78, 0xFE, 0xFF, 0xFE, 0x78 };
+#ifndef __GRAPHICS_H__
+#define __GRAPHICS_H__
 
- #define GRAPHIC_SPLASH_SIZE 5
- const unsigned char graphic_splash[] = {0xA0, 0x40, 0x80, 0x40, 0xA0 };
+// graphics_draw_line
+//  Draw a vertical line on the LCD at the specified column
+void graphics_draw_line(unsigned char x);
+
+// graphics_start_drip_animation
+//  Begin the drip animation at the specified column
+void graphics_start_drip_animation(unsigned char x);
+
+// graphics_step_drip_animation
+//  Draw the next frame of the drip animation
+void graphics_step_drip_animation();
+
+// graphics_stop_drip_animation
+//  Erase and reset the drip animation
+void graphics_stop_drip_animation();
+
+#endif //__GRAPHICS_H__
 
  //eof
 
