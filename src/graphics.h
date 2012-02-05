@@ -12,6 +12,10 @@
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__
 
+#define STATUS_NORMAL  0
+#define STATUS_ON_HOLD 1
+#define STATUS_EMPTY   2
+
 // graphics_draw_line
 //  Draw a vertical line on the LCD at the specified column
 void graphics_draw_line(unsigned char x);
@@ -31,6 +35,10 @@ void graphics_stop_drip_animation();
 // graphics_write_string
 //  Write a string to the specified coordinates on the LCD
 void graphics_write_string(unsigned char x, unsigned char y, const char* pStr);
+
+// graphics_show_status
+//  Write a status message to the LCD
+void graphics_flash_status(unsigned char status);
 
 #endif //__GRAPHICS_H__
 

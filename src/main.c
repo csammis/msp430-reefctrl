@@ -34,8 +34,9 @@ int main()
     // Set up the screen
     graphics_draw_line(70);
 
-    graphics_write_string(0, 0, "Auto topoff");
-    graphics_write_string(0, 2, "Status:");
+    graphics_write_string(0, 0,  "Auto topoff");
+    graphics_write_string(0, 1,  "~~~~~~~~~~~");
+    graphics_write_string(0, 2,  "Status:");
 
     // TimerA functions as a RTC sourced from ACLK
     BCSCTL1 &= XTS;
@@ -45,6 +46,7 @@ int main()
     TACTL = TASSEL_1 | MC_1;
     TACCTL0 = CCIE;
 
+    //csnote the LCD will normally not have its backlight on
     P1OUT ^= BIT3;
 
     __bis_SR_register(CPUOFF | GIE); // Switch to LPM0 and enable interrupts
@@ -60,6 +62,9 @@ Interrupt(TIMERA0_VECTOR) timerA_isr()
 
     //csnote: the drip animation starts at col 79
     //graphics_step_drip_animation();
+
+    //csnote: status flashing is too odd looking at 0.5Hz, set TACCR0 to 0x7FFF for status messages
+    graphics_flash_status(STATUS_EMPTY);
 }
 //eof
 

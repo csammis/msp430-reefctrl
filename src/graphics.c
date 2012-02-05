@@ -1,6 +1,11 @@
 #include "graphics.h"
 #include "lcd.h"
 
+#define STATUS_MSG_NORMAL    "           "
+#define STATUS_MSG_ON_HOLD   "  ON HOLD  "
+#define STATUS_MSG_EMPTY     "RESV. EMPTY"
+#define STATUS_MSG_CLEARLINE "           " // This is different from NORMAL in case I want to put something in NORMAL.
+
 #define GRAPHIC_DRIP_SIZE 5
 const unsigned char graphic_drip[] = { 0x78, 0xFE, 0xFF, 0xFE, 0x78 };
 
@@ -168,6 +173,33 @@ void graphics_write_string(unsigned char x, unsigned char y, const char* pStr)
         lcd_write_graphic(x, y, charset[font_index], 5);
         pChar++;
         x += 6;
+    }
+}
+
+unsigned char status_state = 0;
+void graphics_flash_status(unsigned char status)
+{
+    if (status_state == 1)
+    {
+        graphics_write_string(0, 4, STATUS_MSG_CLEARLINE);
+        status_state = 0;
+    }
+    else
+    {
+        switch (status)
+        {
+        case STATUS_ON_HOLD:
+            graphics_write_string(0, 4, STATUS_MSG_ON_HOLD);
+            break;
+        case STATUS_EMPTY:
+            graphics_write_string(0, 4, STATUS_MSG_EMPTY);
+            break;
+        case STATUS_NORMAL:
+            graphics_write_string(0, 4, STATUS_NORMAL);
+            break;
+        }
+
+        status_state = 1;
     }
 }
 
