@@ -31,8 +31,11 @@ int main()
     init_clocks();
     init_lcd();
 
+    // Set up the screen
     graphics_draw_line(70);
-    graphics_start_drip_animation(79);
+
+    graphics_write_string(0, 0, "Auto topoff");
+    graphics_write_string(0, 2, "Status:");
 
     // TimerA functions as a RTC sourced from ACLK
     BCSCTL1 &= XTS;
@@ -55,7 +58,8 @@ Interrupt(TIMERA0_VECTOR) timerA_isr()
 {
     TACCTL0 &= ~CCIFG;
 
-    graphics_step_drip_animation();
+    //csnote: the drip animation starts at col 79
+    //graphics_step_drip_animation();
 }
 //eof
 

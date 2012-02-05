@@ -158,5 +158,18 @@ void graphics_stop_drip_animation()
     //cstodo erase whatever is at the current step
 }
 
+void graphics_write_string(unsigned char x, unsigned char y, const char* pStr)
+{
+    char* pChar = pStr;
+    char c = '\0';
+    while ((c = *pChar))
+    {
+        unsigned char font_index = c - ' ';
+        lcd_write_graphic(x, y, charset[font_index], 5);
+        pChar++;
+        x += 6;
+    }
+}
+
 //eof
 
