@@ -1,0 +1,16 @@
+msp430-reefctrl
+
+This is my DIY aquarium controller project. The hardware, based around an MSP430G2231, is still incomplete and so naturally the code is incomplete as well. Currently the only planned control feature is an automatic topoff but that list will grow as my confidence in microcontroller programming and hardware skills expand.
+
+FEATURES
+* Automatic Topoff
+** LCD readout (complete!)
+** Status messages (complete!)
+** "Filling" animation (complete!)
+** Cutoff switch for empty resevoir
+** "Hold" toggle for water changes
+
+HARDWARE
+* Microcontroller: MSP430G2231 from Texas Instruments
+* LCD: Nokia 5110 / PCD8544 (http://www.sparkfun.com/products/10168)
+* Two i-float float switches (http://www.aquahub.com/store/ifloatfloatswitch.html)
