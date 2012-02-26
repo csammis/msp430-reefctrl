@@ -1,7 +1,7 @@
 #include "graphics.h"
 #include "lcd.h"
 
-#define STATUS_MSG_NORMAL    "           "
+#define STATUS_MSG_NORMAL    "   A-OK    "
 #define STATUS_MSG_ON_HOLD   "  ON HOLD  "
 #define STATUS_MSG_EMPTY     "RESV. EMPTY"
 #define STATUS_MSG_CLEARLINE "           " // This is different from NORMAL in case I want to put something in NORMAL.
@@ -195,7 +195,7 @@ void graphics_flash_status(unsigned char status)
             graphics_write_string(0, 4, STATUS_MSG_EMPTY);
             break;
         case STATUS_NORMAL:
-            graphics_write_string(0, 4, STATUS_NORMAL);
+            graphics_write_string(0, 4, STATUS_MSG_NORMAL);
             break;
         }
 
