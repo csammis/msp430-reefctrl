@@ -7,7 +7,16 @@
  *
  * peripherals.h
  *  Defines for the pin assignments of the reefctrl peripheral devices.
- *  This file can be referred to in order to determine uC wiring setup if necessary.
+ *
+ *  What is being used by what:
+ *      P1.0: PCD8544, SCE pin
+ *      P1.1: PCD8544, DC pin
+ *      P1.2: Currently available 
+ *      P1.3: PCD8544, LED pin
+ *      P1.4: PCD8544, RST pin (this needs to be replaced with an RC circuit)
+ *      P1.5: USI, clock (to PCD8544 SCLK)
+ *      P1.6: USI, output (to PCD8544 DATA)
+ *      P1.7: Currently available
  */
 
 // Convenience macros for toggling states on P1
@@ -16,28 +25,17 @@
 
 // Pinouts for the float switches in the tank and the resevoir
 #define LVL_TANK_PIN BIT2
-#define LVL_RESV_PIN BIT4
+//cstodo once this pin is available... #define LVL_RESV_PIN BIT4
 
 // Pinouts for controlling the PCD8544
 #define LCD_SCE_PIN  BIT0
 #define LCD_DC_PIN   BIT1
 #define LCD_LED_PIN  BIT3
-#define LCD_RST_PIN  BIT4
+#define LCD_RST_PIN  BIT4   //cstodo this can be driven with an RC circuit instead of having a dedicated pin
 #define LCD_SCLK_PIN BIT5
-#define LCD_DATA_PIN BIT6
 
 // Pinout for the relay to drive the topoff pump
 #define RELAY_PIN BIT7
-
-inline void start_pump()
-{
-    P1_HI(RELAY_PIN);
-}
-
-inline void stop_pump()
-{
-    P1_LO(RELAY_PIN);
-}
 
 //eof
 
