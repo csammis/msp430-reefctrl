@@ -47,7 +47,7 @@
 #define PCD8544_SETVOP 0x80
 
 // lcd_write_byte
-//  Selects the LCD bus, writes data, waits for it to be written, and deselects the bus
+//  Selects the LCD bus, writes data using SPI, waits for it to be written, and deselects the bus
 void lcd_write_byte(unsigned char mode, unsigned char data)
 {
     if (mode == LCD_WRITE_DATA)
@@ -59,26 +59,14 @@ void lcd_write_byte(unsigned char mode, unsigned char data)
         P1_LO(LCD_DC_PIN);
     }
 
-    // Enable clock signals for programming
+    // Enable programming
     P1_LO(LCD_SCE_PIN);
     
-    unsigned char mask = 0x80;
-    while (mask)
-    {
-        if (data & mask)
-        {
-            P1_HI(LCD_DATA_PIN);
-        }
-        else
-        {
-            P1_LO(LCD_DATA_PIN);
-        }
-        
-        LCD_PULSE_CLOCK;
-        mask >>= 1;
-    }
+    USISRL = data;
+    USICNT = 8;
+    while (!(USICTL1 & USIIFG)) ;
 
-    // Disable clock signals again
+    // Disable programming
     P1_HI(LCD_SCE_PIN);
 }
 
@@ -92,7 +80,12 @@ void lcd_set_address(unsigned char x, unsigned char y)
 
 void init_lcd()
 {
-    P1DIR |= LCD_DC_PIN + LCD_SCE_PIN + LCD_SCLK_PIN + LCD_RST_PIN + LCD_LED_PIN + LCD_DATA_PIN;
+    P1DIR |= LCD_DC_PIN + LCD_SCE_PIN + LCD_RST_PIN + LCD_LED_PIN;
+    
+    // Set up SPI
+    USICTL0 |= USIPE6 + USIPE5 + USIMST + USIOE;
+    USICKCTL = USIDIV_1 + USISSEL_2;
+    USICTL0 &= ~USISWRST;
 
     P1_LO(LCD_LED_PIN);
 

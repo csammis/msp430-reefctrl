@@ -38,6 +38,8 @@ int main()
     graphics_write_string(0, 1,  "~~~~~~~~~~~");
     graphics_write_string(0, 2,  "Status:");
 
+    graphics_start_drip_animation(79);
+
     // TimerA functions as a RTC sourced from ACLK
     BCSCTL1 &= XTS;
     BCSCTL3 |= LFXT1S_0 | XCAP_3;
@@ -61,10 +63,10 @@ Interrupt(TIMERA0_VECTOR) timerA_isr()
     TACCTL0 &= ~CCIFG;
 
     //csnote: the drip animation starts at col 79
-    //graphics_step_drip_animation();
+    graphics_step_drip_animation();
 
     //csnote: status flashing is too odd looking at 0.5Hz, set TACCR0 to 0x7FFF for status messages
-    graphics_flash_status(STATUS_EMPTY);
+    //graphics_flash_status(STATUS_EMPTY);
 }
 //eof
 
