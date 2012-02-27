@@ -13,6 +13,8 @@
 #include <msp430.h>
 #include "lcd.h"
 #include "graphics.h"
+#include "sensor.h"
+#include "peripherals.h"
 
 #define TWO_HZ 0x3FFF
 #define ONE_HZ 0x7FFF
@@ -33,7 +35,7 @@ void init_clocks()
     BCSCTL1 &= XTS;
     BCSCTL3 |= LFXT1S_0 | XCAP_3;
 
-    TACCR0 = 0x7FFF;
+    TACCR0 = ONE_HZ;
     TACTL = TASSEL_1 | MC_1;
     TACCTL0 = CCIE;
 }
@@ -43,6 +45,7 @@ int main()
     // Initialization: clocks first, then peripherals
     init_clocks();
     init_lcd();
+    init_sensors();
 
     // Set up the screen
     graphics_draw_line(70);
@@ -66,8 +69,15 @@ Interrupt(TIMERA0_VECTOR) timerA_isr()
 {
     TACCTL0 &= ~CCIFG;
 
-    //csnote: status flashing is too odd looking at 0.5Hz, set TACCR0 to 0x7FFF for status messages
-    //graphics_flash_status(STATUS_EMPTY);
+    if (P1IN & LVL_TANK_PIN)
+    {
+        sensor_tank_level_high();
+    }
+    else
+    {
+        sensor_tank_level_low();
+    }
 }
+
 //eof
 
