@@ -165,7 +165,7 @@ void graphics_stop_drip_animation()
 
 void graphics_write_string(unsigned char x, unsigned char y, const char* pStr)
 {
-    char* pChar = pStr;
+    const char* pChar = pStr;
     char c = '\0';
     while ((c = *pChar))
     {
