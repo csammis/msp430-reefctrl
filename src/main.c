@@ -15,6 +15,7 @@
 #include "graphics.h"
 #include "sensor.h"
 #include "peripherals.h"
+//#include "event.h"
 
 #define TWO_HZ 0x3FFF
 #define ONE_HZ 0x7FFF
@@ -46,6 +47,7 @@ int main()
     init_clocks();
     init_lcd();
     init_sensors();
+    //init_event();
 
     // Set up the screen
     graphics_draw_line(70);

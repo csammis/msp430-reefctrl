@@ -12,12 +12,14 @@ TARGET     = main
 MCU        = msp430g2231
 # List all the source files here
 # eg if you have a source file foo.c then list it here
-SOURCES = main.c lcd.c graphics.c sensor.c
+SOURCES = main.c lcd.c graphics.c sensor.c 
 # Include are located in the Include directory
 INCLUDES = -IInclude
+# Defines
+DEFINES = -DSTDLIB_IS_FOR_CHUMPS
 # Add or subtract whatever MSPGCC flags you want. There are plenty more
 #######################################################################################
-CFLAGS   = -mmcu=$(MCU) -g -Os -Wall -Wunused $(INCLUDES)   
+CFLAGS   = -mmcu=$(MCU) -g -Os -Wall -Wunused $(DEFINES) $(INCLUDES)   
 ASFLAGS  = -mmcu=$(MCU) -x assembler-with-cpp -Wa,-gstabs
 LDFLAGS  = -mmcu=$(MCU) -Wl,-Map=$(TARGET).map
 ########################################################################################
